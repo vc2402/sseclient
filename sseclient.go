@@ -38,13 +38,10 @@ func loop(reader *bufio.Reader, events chan Event) {
 
 	for {
 		line, err := reader.ReadBytes('\n')
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "error during resp.Body read:%s\n", err)
-
-			close(events)
-		}
-
 		switch {
+		case err != nil:
+			fmt.Fprintf(os.Stderr, "error during resp.Body read:%s\n", err)
+			close(events)
 		case hasPrefix(line, ":"):
 			// Comment, do nothing
 		case hasPrefix(line, "retry:"):
