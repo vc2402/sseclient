@@ -42,6 +42,7 @@ func loop(reader *bufio.Reader, events chan Event) {
 		case err != nil:
 			fmt.Fprintf(os.Stderr, "error during resp.Body read:%s\n", err)
 			close(events)
+			return
 		case hasPrefix(line, ":"):
 			// Comment, do nothing
 		case hasPrefix(line, "retry:"):
@@ -84,8 +85,8 @@ func loop(reader *bufio.Reader, events chan Event) {
 
 		default:
 			fmt.Fprintf(os.Stderr, "Error: len:%d\n%s", len(line), line)
-
 			close(events)
+			return
 		}
 	}
 }
